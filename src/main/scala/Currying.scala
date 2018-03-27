@@ -2,6 +2,8 @@ object Currying extends App {
   def curry[A, B, C](f: (A, B) => C): A => (B => C) =
     (a: A) => (b: B) => f(a, b)
 
+  def uncurry[A, B, C](f: A=> B =>C):(A, B)=> C
+
   override def main(args: Array[String]): Unit = {
     def longToFunction = curry((a: Long, b: Int)=>a<b)
     def intToBoolean = longToFunction(69L)
