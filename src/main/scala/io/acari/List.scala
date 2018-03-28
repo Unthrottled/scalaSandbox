@@ -3,6 +3,10 @@ package io.acari
 /**
   * Forged in the flames of battle by alex.
   */
+sealed trait List[+A]
+
+case object Nil extends List[Nothing]
+case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
 
 object List {
@@ -29,6 +33,6 @@ object List {
       case _ => 101
     }
 
-    println(result);
+    println(result)
   }
 }
