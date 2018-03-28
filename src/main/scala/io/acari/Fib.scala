@@ -1,3 +1,5 @@
+package io.acari
+
 object Fib extends App {
 
   def fibonnaci(n: Int): Int = {

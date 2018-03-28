@@ -1,3 +1,5 @@
+package io.acari
+
 object AbsoluteValue extends App {
 
   def absoluteValue(n: Int): Int =
