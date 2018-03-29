@@ -3,11 +3,11 @@ package io.acari
 /**
   * Forged in the flames of battle by alex.
   */
-sealed trait List[+A]
+sealed trait List[+T]
 
 case object Nil extends List[Nothing]
 
-case class Cons[+A](head: A, tail: List[A]) extends List[A]
+case class Cons[+T](head: T, tail: List[T]) extends List[T]
 
 
 object List extends App {
@@ -23,17 +23,25 @@ object List extends App {
     case Cons(x, xs) => x * product(xs)
   }
 
-  def apply[A](as: A*): List[A] =
+  def apply[T](as: T*): List[T] =
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
 
-  def pop[A](list: List[A]): List[A] = list match {
+  def pop[T](list: List[T]): List[T] = list match {
     case Cons(x, xs) => xs
   }
 
-  def drop[A](list: List[A], n: Int): List[A] =
+  def peek[T](list: List[T]): T = list match {
+    case Cons(x, xs) => x
+  }
+
+  def drop[T](list: List[T], n: Int): List[T] =
     if (n < 2) pop(list)
     else drop(pop(list), n - 1)
+
+  def dropWhile[T](list: List[T], shouldRemove: T => Boolean): List[T] =
+    if (shouldRemove(peek(list))) dropWhile(pop(list), shouldRemove)
+    else list
 
 
   override def main(args: Array[String]): Unit = {
@@ -62,6 +70,11 @@ object List extends App {
     val dropTheBase = drop(List("ohh", "dats", "vewy", "nice"), 2)
 
     println(dropTheBase)
+
+    val vewyNice = dropWhile[String](List("ohh", "dats", "vewy", "nice"),
+      s => !s.equals("nice"))
+
+    println(vewyNice)
 
   }
 }
