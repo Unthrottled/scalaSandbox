@@ -27,6 +27,14 @@ object List extends App {
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
 
+  def pop[A](list: List[A]): List[A] = list match {
+    case Cons(x, xs) => xs
+  }
+
+  def drop[A](list: List[A], n: Int): List[A] =
+    if (n < 2) pop(list)
+    else drop(pop(list), n - 1)
+
 
   override def main(args: Array[String]): Unit = {
 
@@ -49,6 +57,11 @@ object List extends App {
     }
 
     println(swapOne)
+
+
+    val dropTheBase = drop(List("ohh", "dats", "vewy", "nice"), 2)
+
+    println(dropTheBase)
 
   }
 }
