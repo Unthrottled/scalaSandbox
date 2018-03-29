@@ -43,6 +43,11 @@ object List extends App {
     if (shouldRemove(peek(list))) dropWhile(pop(list), shouldRemove)
     else list
 
+  def init[T](list: List[T]): List[T] = list match {
+    case Cons(x, Cons(y, Nil)) => Cons(x, Nil)
+    case Cons(x, Cons(y, z)) => Cons(x, init(Cons(y, z)))
+  }
+
 
   override def main(args: Array[String]): Unit = {
 
@@ -75,6 +80,10 @@ object List extends App {
       s => !s.equals("nice"))
 
     println(vewyNice)
+
+    val allButOne = init(List(5,4,3,2,1))
+    println(allButOne)
+
 
   }
 }
