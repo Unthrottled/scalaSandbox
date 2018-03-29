@@ -10,7 +10,7 @@ case object Nil extends List[Nothing]
 case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
 
-object List {
+object List extends App {
 
   def sum(ints: List[Int]): Int = ints match {
     case Nil => 0
@@ -28,7 +28,7 @@ object List {
     else Cons(as.head, apply(as.tail: _*))
 
 
-  def main(args: Array[String]): Unit = {
+  override def main(args: Array[String]): Unit = {
 
     val result: Int = List(1, 2, 3, 4, 5) match {
       case Cons(x, Cons(2, Cons(4, _))) => x
@@ -39,7 +39,9 @@ object List {
     }
     println(result)
 
-    val removeOne = List(5, 4, 3, 2, 1)
+    val removeOne: List[Int] = List(5, 4, 3, 2, 1) match {
+      case Cons(x, xs) => xs
+    }
     println(removeOne)
 
   }
