@@ -63,6 +63,12 @@ object List extends App {
   def length[T](list: List[T]): Int =
     reduceRight(list, 0)((t, u) => u + 1)
 
+  def reduceLeft[T, U](list: List[T], u: U)(f: (U, T)=>U): U =
+    list match {
+      case Nil => u
+      case Cons(x, xs)=> reduceLeft(xs, f(u, x))(f)
+    }
+
 
   override def main(args: Array[String]): Unit = {
 
