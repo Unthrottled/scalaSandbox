@@ -77,7 +77,7 @@ object List extends App {
     println(dropTheBase)
 
     val vewyNice = dropWhile[String](List("ohh", "dats", "vewy", "nice"),
-      s => !s.equals("nice"))
+      !_.equals("nice"))
 
     println(vewyNice)
 
