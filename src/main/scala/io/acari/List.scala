@@ -48,17 +48,20 @@ object List extends App {
     case Cons(x, Cons(y, z)) => Cons(x, init(Cons(y, z)))
   }
 
-  def reduceRight[T, U](list: List[T], u: U)(f: (T, U)=> U): U =
+  def reduceRight[T, U](list: List[T], u: U)(f: (T, U) => U): U =
     list match {
       case Nil => u
       case Cons(x, xs) => f(x, reduceRight(xs, u)(f))
     }
 
   def sumBetter(numbers: List[Int]) =
-    reduceRight(numbers, 0)(_+_)
+    reduceRight(numbers, 0)(_ + _)
 
   def productBetter(numbers: List[Double]) =
-    reduceRight(numbers, 1D)(_*_)
+    reduceRight(numbers, 1D)(_ * _)
+
+  def length[T](list: List[T]): Int =
+    reduceRight(list, 0)((t, u) => u + 1)
 
 
   override def main(args: Array[String]): Unit = {
@@ -100,9 +103,12 @@ object List extends App {
     val summyBoi = sumBetter(fibo)
     println(summyBoi)
 
-    val producto = productBetter(List(1d, 2d,3d,4d,5d))
+    val producto = productBetter(List(1d, 2d, 3d, 4d, 5d))
     println(producto)
 
+    println(reduceRight(List(1, 2, 3), Nil: List[Int])(Cons(_, _)))
+
+    println(length(fibo))
 
   }
 }
