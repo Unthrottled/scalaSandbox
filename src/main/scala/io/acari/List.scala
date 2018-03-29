@@ -44,5 +44,11 @@ object List extends App {
     }
     println(removeOne)
 
+    val swapOne = List("me me", "big", "boy") match {
+      case Cons(x, xs) => Cons("Me Me", xs)
+    }
+
+    println(swapOne)
+
   }
 }
