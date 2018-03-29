@@ -63,11 +63,20 @@ object List extends App {
   def length[T](list: List[T]): Int =
     reduceRight(list, 0)((t, u) => u + 1)
 
-  def reduceLeft[T, U](list: List[T], u: U)(f: (U, T)=>U): U =
+  def reduceLeft[T, U](list: List[T], u: U)(f: (U, T) => U): U =
     list match {
       case Nil => u
-      case Cons(x, xs)=> reduceLeft(xs, f(u, x))(f)
+      case Cons(x, xs) => reduceLeft(xs, f(u, x))(f)
     }
+
+  def sumEvenBetter(ints: List[Int]): Int =
+    reduceLeft(ints, 0)(_ + _)
+
+  def productEvenBetter(doubles: List[Double]): Double =
+    reduceLeft(doubles, 1D)(_ * _)
+
+  def lengthEvenBetter[T](list: List[T]): Int =
+    reduceLeft(list, 0)((u, t) => u + 1)
 
 
   override def main(args: Array[String]): Unit = {
@@ -109,12 +118,17 @@ object List extends App {
     val summyBoi = sumBetter(fibo)
     println(summyBoi)
 
-    val producto = productBetter(List(1d, 2d, 3d, 4d, 5d))
+    val michealDubles = List(1d, 2d, 3d, 4d, 5d)
+    val producto = productBetter(michealDubles)
     println(producto)
 
     println(reduceRight(List(1, 2, 3), Nil: List[Int])(Cons(_, _)))
 
     println(length(fibo))
+
+    println(sumEvenBetter(fibo))
+    println(productEvenBetter(michealDubles))
+    println(lengthEvenBetter(fibo))
 
   }
 }
