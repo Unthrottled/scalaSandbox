@@ -71,7 +71,7 @@ object List extends App {
     }
 
   def reverseList[T](list: List[T]): List[T] =
-    reduceLeft[T, List[T]](list, Nil)((u, t)=>Cons(t, u))
+    reduceLeft[T, List[T]](list, Nil)((u, t) => Cons(t, u))
 
   def sumEvenBetter(ints: List[Int]): Int =
     reduceLeft(ints, 0)(_ + _)
@@ -82,11 +82,11 @@ object List extends App {
   def lengthEvenBetter[T](list: List[T]): Int =
     reduceLeft(list, 0)((u, t) => u + 1)
 
-  def append[T](list: List[T], t: T): List[T]=
+  def append[T](list: List[T], t: T): List[T] =
     Cons(t, list)
 
-  def appendList[T](list: List[T], otherList: List[T]): List[T]=
-    reduceRight(list, otherList)((t,u)=>Cons(t, u))
+  def appendList[T](list: List[T], otherList: List[T]): List[T] =
+    reduceRight(list, otherList)((t, u) => Cons(t, u))
 
   def flatMap[T](list: List[List[T]]): List[T] =
     reduceRight[List[T], List[T]](list, Nil)(appendList)
@@ -151,5 +151,8 @@ object List extends App {
     println(listOfLists)
     println(flatMap(listOfLists))
 
+
+    println(reduceRight[Double, List[Double]]
+      (michealDubles, Nil)((t, u) => Cons(t + 1, u)))
   }
 }
