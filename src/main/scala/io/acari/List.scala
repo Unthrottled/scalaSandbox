@@ -81,6 +81,9 @@ object List extends App {
   def lengthEvenBetter[T](list: List[T]): Int =
     reduceLeft(list, 0)((u, t) => u + 1)
 
+  def append[T](list: List[T], t: T): List[T]=
+    reduceLeft(list, Cons(t, list))((u,_)=>u)
+
 
   override def main(args: Array[String]): Unit = {
 
@@ -133,6 +136,7 @@ object List extends App {
     println(productEvenBetter(michealDubles))
     println(lengthEvenBetter(fibo))
     println(reverseList(fibo))
+    println(append(fibo, 6))
 
   }
 }
