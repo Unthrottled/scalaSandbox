@@ -82,7 +82,13 @@ object List extends App {
     reduceLeft(list, 0)((u, t) => u + 1)
 
   def append[T](list: List[T], t: T): List[T]=
-    reduceLeft(list, Cons(t, list))((u,_)=>u)
+    Cons(t, list)
+
+  def appendList[T](list: List[T], otherList: List[T]): List[T]=
+    reduceRight(list, otherList)((t,u)=>Cons(t, u))
+
+  def flatMap[T](list: List[List[T]]): List[T] =
+    reduceRight[List[T], List[T]](list, Nil)(appendList)
 
 
   override def main(args: Array[String]): Unit = {
@@ -137,6 +143,12 @@ object List extends App {
     println(lengthEvenBetter(fibo))
     println(reverseList(fibo))
     println(append(fibo, 6))
+
+    val listOfLists = List(List("Three", "To the One", "Two the One", "To the Three"),
+      List("Here", "Come", "Dat", "Boi"),
+      List("Me", "Me", "Big", "Boy"))
+    println(listOfLists)
+    println(flatMap(listOfLists))
 
   }
 }
