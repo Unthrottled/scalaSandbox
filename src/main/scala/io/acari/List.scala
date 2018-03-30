@@ -69,6 +69,9 @@ object List extends App {
       case Cons(x, xs) => reduceLeft(xs, f(u, x))(f)
     }
 
+  def reverseList[T](list: List[T]): List[T] =
+    reduceLeft[T, List[T]](list, Nil)((u, t)=>Cons(t, u))
+
   def sumEvenBetter(ints: List[Int]): Int =
     reduceLeft(ints, 0)(_ + _)
 
@@ -129,6 +132,7 @@ object List extends App {
     println(sumEvenBetter(fibo))
     println(productEvenBetter(michealDubles))
     println(lengthEvenBetter(fibo))
+    println(reverseList(fibo))
 
   }
 }
