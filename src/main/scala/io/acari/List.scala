@@ -48,6 +48,7 @@ object List extends App {
     case Cons(x, Cons(y, z)) => Cons(x, init(Cons(y, z)))
   }
 
+  //TODO: MAKE TAIL RECURSIVE
   def reduceRight[T, U](list: List[T], u: U)(f: (T, U) => U): U =
     list match {
       case Nil => u
