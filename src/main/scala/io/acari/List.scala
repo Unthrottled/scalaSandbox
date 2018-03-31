@@ -91,6 +91,9 @@ object List extends App {
   def flatMap[T](list: List[List[T]]): List[T] =
     reduceRight[List[T], List[T]](list, Nil)(appendList)
 
+  def map[T, U](list: List[T])(f: (T)=>U): List[U] =
+    reduceRight(list, Nil: List[U])((t, v)=> Cons(f(t), v))
+
 
   override def main(args: Array[String]): Unit = {
 
@@ -157,5 +160,7 @@ object List extends App {
 
     println(reduceRight[Double, List[String]]
       (michealDubles, Nil)((t, u) => Cons(t.toString, u)))
+
+    println(map(fibo)(i=>i+ 5L))
   }
 }
