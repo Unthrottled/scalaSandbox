@@ -94,6 +94,9 @@ object List extends App {
   def map[T, U](list: List[T])(f: (T)=>U): List[U] =
     reduceRight(list, Nil: List[U])((t, v)=> Cons(f(t), v))
 
+  def filter[T](list: List[T])(f: (T=>Boolean)): List[T] =
+    reduceRight(list, Nil: List[T])((t, u)=> if(f(t)) Cons(t, u) else u)
+
 
   override def main(args: Array[String]): Unit = {
 
@@ -162,5 +165,7 @@ object List extends App {
       (michealDubles, Nil)((t, u) => Cons(t.toString, u)))
 
     println(map(fibo)(i=>i+ 5L))
+
+    println(filter(fibo)((d)=> d % 2 != 0))
   }
 }
