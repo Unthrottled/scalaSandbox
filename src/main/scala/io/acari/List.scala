@@ -91,15 +91,28 @@ object List extends App {
   def flatMap[T](list: List[List[T]]): List[T] =
     reduceRight[List[T], List[T]](list, Nil)(appendList)
 
-  def map[T, U](list: List[T])(f: (T)=>U): List[U] =
-    reduceRight(list, Nil: List[U])((t, v)=> Cons(f(t), v))
+  def map[T, U](list: List[T])(f: (T) => U): List[U] =
+    reduceRight(list, Nil: List[U])((t, v) => Cons(f(t), v))
 
-  def filter[T](list: List[T])(f: (T=>Boolean)): List[T] =
-    reduceRight(list, Nil: List[T])((t, u)=> if(f(t)) Cons(t, u) else u)
+  def filter[T](list: List[T])(f: (T => Boolean)): List[T] =
+    reduceRight(list, Nil: List[T])((t, u) => if (f(t)) Cons(t, u) else u)
 
   def flatMap2[T, U](list: List[T])(f: T => List[U]): List[U] =
-    reduceRight(list, Nil: List[U])((t,u)=>appendList(f(t), u))
+    reduceRight(list, Nil: List[U])((t, u) => appendList(f(t), u))
 
+  def zipInt(list: List[Int], list2: List[Int]): List[Int] =
+    zipIntHelper(list, list2, Nil)
+
+  private def zipIntHelper(list: List[Int], list2: List[Int], returnList: List[Int]): List[Int] =
+    if (list == Nil) appendOther(list2, returnList)
+    else if (list2 == Nil) appendOther(list, returnList)
+    else zipIntHelper(pop(list), pop(list2), append(returnList, peek(list) + peek(list2)))
+
+  private def appendOther(list: List[Int], returnList: List[Int]) = {
+    if (list != Nil)
+      appendList(returnList, list)
+    else returnList
+  }
 
   override def main(args: Array[String]): Unit = {
 
@@ -144,7 +157,8 @@ object List extends App {
     val producto = productBetter(michealDubles)
     println(producto)
 
-    println(reduceRight(List(1, 2, 3), Nil: List[Int])(Cons(_, _)))
+    val shorty = List(1, 2, 3)
+    println(reduceRight(shorty, Nil: List[Int])(Cons(_, _)))
 
     println(length(fibo))
 
@@ -167,10 +181,12 @@ object List extends App {
     println(reduceRight[Double, List[String]]
       (michealDubles, Nil)((t, u) => Cons(t.toString, u)))
 
-    println(map(fibo)(i=>i+ 5L))
+    println(map(fibo)(i => i + 5L))
 
-    println(filter(fibo)((d)=> d % 2 != 0))
+    println(filter(fibo)((d) => d % 2 != 0))
 
-    println(flatMap2(fibo)(d=>List(d,d,d)))
+    println(flatMap2(fibo)(d => List(d, d, d)))
+
+    println(zipInt(fibo, shorty))
   }
 }
