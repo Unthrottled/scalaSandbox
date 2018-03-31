@@ -101,14 +101,13 @@ object List extends App {
     reduceRight(list, Nil: List[U])((t, u) => appendList(f(t), u))
 
   def zipInt(list: List[Int], list2: List[Int]): List[Int] =
-    zipIntHelper(list, list2, Nil)
+    zipIntHelper(list, list2, Nil)(_+_)
 
-  private def zipIntHelper(list: List[Int], list2: List[Int], returnList: List[Int]): List[Int] =
-    if (list == Nil) appendOther(list2, returnList)
-    else if (list2 == Nil) appendOther(list, returnList)
-    else zipIntHelper(pop(list), pop(list2), append(returnList, peek(list) + peek(list2)))
+  private def zipIntHelper[T, U](list: List[T], list2: List[T], returnList: List[U])(f:(T,T)=>U): List[U] =
+    if (list == Nil || list2 == Nil)  returnList
+    else zipIntHelper(pop(list), pop(list2), append(returnList, f(peek(list), peek(list2))))(f)
 
-  private def appendOther(list: List[Int], returnList: List[Int]) = {
+  private def appendOther[T](list: List[T], returnList: List[T]) = {
     if (list != Nil)
       appendList(returnList, list)
     else returnList
