@@ -103,6 +103,9 @@ object List extends App {
   def zipInt(list: List[Int], list2: List[Int]): List[Int] =
     zipIntHelper(list, list2, Nil)(_+_)
 
+  def zipWith[T, U](list: List[T], list2: List[T])(f: (T, T)=>U): List[U] =
+    zipIntHelper(list, list2, Nil)(f)
+
   private def zipIntHelper[T, U](list: List[T], list2: List[T], returnList: List[U])(f:(T,T)=>U): List[U] =
     if (list == Nil || list2 == Nil)  returnList
     else zipIntHelper(pop(list), pop(list2), append(returnList, f(peek(list), peek(list2))))(f)
