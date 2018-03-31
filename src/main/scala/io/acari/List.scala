@@ -154,5 +154,8 @@ object List extends App {
 
     println(reduceRight[Double, List[Double]]
       (michealDubles, Nil)((t, u) => Cons(t + 1, u)))
+
+    println(reduceRight[Double, List[String]]
+      (michealDubles, Nil)((t, u) => Cons(t.toString, u)))
   }
 }
