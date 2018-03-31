@@ -97,6 +97,9 @@ object List extends App {
   def filter[T](list: List[T])(f: (T=>Boolean)): List[T] =
     reduceRight(list, Nil: List[T])((t, u)=> if(f(t)) Cons(t, u) else u)
 
+  def flatMap2[T, U](list: List[T])(f: T => List[U]): List[U] =
+    reduceRight(list, Nil: List[U])((t,u)=>appendList(f(t), u))
+
 
   override def main(args: Array[String]): Unit = {
 
@@ -167,5 +170,7 @@ object List extends App {
     println(map(fibo)(i=>i+ 5L))
 
     println(filter(fibo)((d)=> d % 2 != 0))
+
+    println(flatMap2(fibo)(d=>List(d,d,d)))
   }
 }
