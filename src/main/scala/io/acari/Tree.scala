@@ -19,8 +19,13 @@ object Tree extends App {
   }
 
   def depth[T](root: Tree[T]): Int = root match {
-    case Leaf(_)=> 1;
+    case Leaf(_) => 1;
     case Branch(left, right) => (depth(left) max depth(right)) + 1
+  }
+
+  def map[T, U](root: Tree[T])(f: T => U): Tree[U] = root match {
+    case Leaf(t) => Leaf(f(t))
+    case Branch(left, right) => Branch(map(left)(f), map(right)(f))
   }
 
   override def main(args: Array[String]): Unit = {
