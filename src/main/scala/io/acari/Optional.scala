@@ -18,10 +18,18 @@ object Optional extends App {
       Some(seq.map(f).sum)
         .map(v => v / seq.length)
 
+  def map2[T, U, R](tO: Option[T], uO: Option[U])(f: (T, U) => R): Option[R] =
+    tO.flatMap(t => uO.map(u => f(t, u)))
+
 
   override def main(args: Array[String]): Unit = {
     val doubles = Seq(1d, 2, 3, 4, 5)
     println(variance(doubles).getOrElse(-1D))
-    println(calucluateMean(doubles)(d=>d).getOrElse(-1))
+    println(calucluateMean(doubles)(d => d).getOrElse(-1))
+    
+    val mt: Option[String] = None
+    println(map2(Some("Ayy"), Some("lmao"))(_ + _).getOrElse("NO SHALL PASS!"))
+    println(map2(Some("Ayy"), mt)(_ + _).getOrElse("NO SHALL PASS!"))
+    println(map2(mt, Some("lmao"))(_ + _).getOrElse("NO SHALL PASS!"))
   }
 }
