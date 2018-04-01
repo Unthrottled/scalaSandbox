@@ -26,7 +26,8 @@ object Trees extends App {
 
   def depth[T](root: Tree[T]): Int = root match {
     case Leaf(_) => 1;
-    case Branch(left, right) => (depth(left) max depth(right)) + 1
+    case Branch(l
+      eft, right) => (depth(left) max depth(right)) + 1
   }
 
   def depth2[T](root: Tree[T]): Int =
