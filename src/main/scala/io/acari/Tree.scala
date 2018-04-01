@@ -18,6 +18,9 @@ object Trees extends App {
     case Branch(left, right) => maximum(left).max(maximum(right))
   }
 
+  def maximum2(root: Tree[Int]): Int =
+    fold(root)(i=>i)((left, right)=> left max right)
+
   def depth[T](root: Tree[T]): Int = root match {
     case Leaf(_) => 1;
     case Branch(left, right) => (depth(left) max depth(right)) + 1
