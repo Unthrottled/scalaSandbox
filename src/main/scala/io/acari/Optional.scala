@@ -7,20 +7,21 @@ package io.acari
 object Optional extends App {
 
   def variance(seq: Seq[Double]): Option[Double] =
-    calucluateMean(seq)(_+_)
-    .flatMap(mean =>
-      calucluateMean(0 +: seq)((t, u)=> t + Math.pow(u - mean, 2)))
+    calucluateMean(seq)(i => i)
+      .flatMap(mean =>
+        calucluateMean(seq)(t => Math.pow(t - mean, 2)))
 
 
-  private def calucluateMean[T](seq: Seq[T])(f: (T, T) => Double): Option[Double] =
+  private def calucluateMean[T](seq: Seq[T])(f: T => Double): Option[Double] =
     if (seq.isEmpty) None
     else
-      Some(seq.reduce((a, b)=> f(a,b)))
+      Some(seq.map(f).sum)
         .map(v => v / seq.length)
 
 
   override def main(args: Array[String]): Unit = {
-    println(variance(Seq(1,2,3,4,5)).getOrElse(-1D))
-
+    val doubles = Seq(1d, 2, 3, 4, 5)
+    println(variance(doubles).getOrElse(-1D))
+    println(calucluateMean(doubles)(d=>d).getOrElse(-1))
   }
 }
