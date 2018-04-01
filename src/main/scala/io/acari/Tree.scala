@@ -18,6 +18,11 @@ object Tree extends App {
     case Branch(left, right) => maximum(left).max(maximum(right))
   }
 
+  def depth[T](root: Tree[T]): Int = root match {
+    case Leaf(_)=> 1;
+    case Branch(left, right) => (depth(left) max depth(right)) + 1
+  }
+
   override def main(args: Array[String]): Unit = {
 
   }
