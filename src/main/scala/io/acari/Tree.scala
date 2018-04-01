@@ -23,6 +23,9 @@ object Trees extends App {
     case Branch(left, right) => (depth(left) max depth(right)) + 1
   }
 
+  def depth2[T](root: Tree[T]): Int =
+    fold(root)(_=>1)((left, right)=> (left max right)+1)
+
   def map[T, U](root: Tree[T])(f: T => U): Tree[U] = root match {
     case Leaf(t) => Leaf(f(t))
     case Branch(left, right) => Branch(map(left)(f), map(right)(f))
