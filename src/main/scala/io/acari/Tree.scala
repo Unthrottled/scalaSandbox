@@ -13,13 +13,16 @@ object Trees extends App {
     case Branch(left, right) => 1 + size(left) + size(right)
   }
 
+  def size2[T](root: Tree[T]): Int =
+    fold(root)(_ => 1)((left, right) => 1 + left + right)
+
   def maximum(root: Tree[Int]): Int = root match {
     case Leaf(i) => i
     case Branch(left, right) => maximum(left).max(maximum(right))
   }
 
   def maximum2(root: Tree[Int]): Int =
-    fold(root)(i=>i)((left, right)=> left max right)
+    fold(root)(i => i)((left, right) => left max right)
 
   def depth[T](root: Tree[T]): Int = root match {
     case Leaf(_) => 1;
@@ -27,7 +30,7 @@ object Trees extends App {
   }
 
   def depth2[T](root: Tree[T]): Int =
-    fold(root)(_=>1)((left, right)=> (left max right)+1)
+    fold(root)(_ => 1)((left, right) => (left max right) + 1)
 
   def map[T, U](root: Tree[T])(f: T => U): Tree[U] = root match {
     case Leaf(t) => Leaf(f(t))
