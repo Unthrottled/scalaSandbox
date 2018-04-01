@@ -29,9 +29,10 @@ object Tree extends App {
   }
 
   def fold[T, U](root: Tree[T])
-                (leaf: T => Tree[U]): Tree[U] = root match {
+                (leaf: T => U)
+                (branch: T => U): U = root match {
     case Leaf(t) => leaf(t)
-    case Branch(left, right) => Branch(fold(left)(leaf), fold(right)(leaf))
+    case Branch(left, right) => branch(fold(left)(leaf), fold(right)(leaf))
   }
 
   override def main(args: Array[String]): Unit = {
