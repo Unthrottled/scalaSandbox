@@ -28,6 +28,12 @@ object Tree extends App {
     case Branch(left, right) => Branch(map(left)(f), map(right)(f))
   }
 
+  def fold[T, U](root: Tree[T])
+                (leaf: T => Tree[U]): Tree[U] = root match {
+    case Leaf(t) => leaf(t)
+    case Branch(left, right) => Branch(fold(left)(leaf), fold(right)(leaf))
+  }
+
   override def main(args: Array[String]): Unit = {
 
   }
