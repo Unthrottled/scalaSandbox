@@ -21,12 +21,16 @@ object Optional extends App {
   def map2[T, U, R](tO: Option[T], uO: Option[U])(f: (T, U) => R): Option[R] =
     tO.flatMap(t => uO.map(u => f(t, u)))
 
+//  def sequence[T](listTO: List[Option[T]]): Option[List[T]] =
+//    List.reduceRight(listTO, Nil: List[Option[T]])
+//      .apply((tO,uO)=> map2(tO,uO)((t, u)=> Cons(t, u)))
+
 
   override def main(args: Array[String]): Unit = {
     val doubles = Seq(1d, 2, 3, 4, 5)
     println(variance(doubles).getOrElse(-1D))
     println(calucluateMean(doubles)(d => d).getOrElse(-1))
-    
+
     val mt: Option[String] = None
     println(map2(Some("Ayy"), Some("lmao"))(_ + _).getOrElse("NO SHALL PASS!"))
     println(map2(Some("Ayy"), mt)(_ + _).getOrElse("NO SHALL PASS!"))
