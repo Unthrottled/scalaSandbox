@@ -25,6 +25,8 @@ object Optional extends App {
     List.reduceRight(listTO, Some(Nil): Option[List[T]])((tO, uO) =>
       map2(tO, uO)((t, u) => Cons(t, u)))
 
+  def traverse[T, U](tL: List[T])(f: T => Option[U]): Option[List[U]] = ???
+
   override def main(args: Array[String]): Unit = {
     val doubles = Seq(1d, 2, 3, 4, 5)
     println(variance(doubles).getOrElse(-1D))
