@@ -19,7 +19,10 @@ object Optional extends App {
         .map(v => v / seq.length)
 
   def map2[T, U, R](tO: Option[T], uO: Option[U])(f: (T, U) => R): Option[R] =
-    tO.flatMap(t => uO.map(u => f(t, u)))
+    for {
+      t <-tO
+      u <- uO
+    } yield f(t,u)
 
   def sequence[T](listTO: List[Option[T]]): Option[List[T]] =
     List.reduceRight(listTO, Some(Nil): Option[List[T]])((tO, uO) =>
