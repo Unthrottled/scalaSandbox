@@ -10,7 +10,8 @@ sealed trait Either[+E, +T] {
 
   def orElse[EE >: E, U >: T](u: => Either[EE, U]): Either[EE, U] = ???
 
-  def map2[EE >: E, U, V](u: Either[EE, U])(f: (T, U) => V): Either[EE, V] = ???
+  def map2[EE >: E, U, V](uE: Either[EE, U])(f: (T, U) => V): Either[EE, V] =
+    flatMap(t => uE.map(u=> f(t, u)))
 }
 
 case class Left[+E](value: E) extends Either[E, Nothing]
