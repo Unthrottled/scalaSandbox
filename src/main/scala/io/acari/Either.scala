@@ -13,13 +13,18 @@ sealed trait Either[+E, +T] {
     case Left(e) => Left(e)
     case Right(t) => f(t)
   }
+
   def orElse[EE >: E, U >: T](u: => Either[EE, U]): Either[EE, U] = this match {
     case Left(_) => u
     case Right(_) => this
   }
 
   def map2[EE >: E, U, V](uE: Either[EE, U])(f: (T, U) => V): Either[EE, V] =
-    flatMap(t => uE.map(u=> f(t, u)))
+    flatMap(t => uE.map(u => f(t, u)))
+
+  def sequence[E, T](es: List[Either[E, T]]): Either[E, List[T]] =
+    List.reduceRight[Either[E, T], Either[E, List[T]]](es, Right(Nil))((e, lE) =>
+      e.flatMap(t => lE.map(list => Cons(t, list))))
 }
 
 case class Left[+E](value: E) extends Either[E, Nothing]
