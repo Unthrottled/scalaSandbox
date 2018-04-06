@@ -25,6 +25,11 @@ sealed trait Either[+E, +T] {
   def sequence[E, T](es: List[Either[E, T]]): Either[E, List[T]] =
     List.reduceRight[Either[E, T], Either[E, List[T]]](es, Right(Nil))((e, lE) =>
       e.flatMap(t => lE.map(list => Cons(t, list))))
+
+  def traverse[E, T, U](es: List[Either[E, T]])(f: T => Either[E, U]): Either[E, List[U]] =
+    List.reduceRight[Either[E, T], Either[E, List[U]]](es, Right(Nil))((e, lE) =>
+      e.flatMap(t => f(t))
+        .flatMap(u => lE.map(list => Cons(u, list))))
 }
 
 case class Left[+E](value: E) extends Either[E, Nothing]
