@@ -1,9 +1,15 @@
-package io
+package io.acari.stream
 
 /**
   * Forged in the flames of battle by alex.
   */
+
 import Stream._
+
+case object Empty extends Stream[Nothing]
+case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
+
+
 trait Stream[+A] {
 
   def foldRight[B](z: => B)(f: (A, => B) => B): B = // The arrow `=>` in front of the argument type `B` means that the function `f` takes its second argument by name and may choose not to evaluate it.
@@ -35,8 +41,6 @@ trait Stream[+A] {
 
   def startsWith[B](s: Stream[B]): Boolean = ???
 }
-case object Empty extends Stream[Nothing]
-case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
 
 object Stream {
   def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = {
