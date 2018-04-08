@@ -2,6 +2,9 @@ package io.acari
 
 object Fib extends App {
 
+  override def main(args: Array[String]): Unit =
+    println(fibonnaci(7))
+
   def fibonnaci(n: Int): Int = {
     def go(n: Int): Int =
       if (n == 0) 0
@@ -10,7 +13,4 @@ object Fib extends App {
 
     go(n)
   }
-
-  override def main(args: Array[String]): Unit =
-    println(fibonnaci(7))
 }

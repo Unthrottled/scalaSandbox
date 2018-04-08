@@ -1,6 +1,16 @@
 package io.acari
 
 object SortedArray extends App {
+  override def main(args: Array[String]): Unit = {
+    val comparator: (String, String) => Boolean = (a: String, b: String) => a.compareTo(b) <= 0
+    println(isSorted(Array("a", "b", "c"),
+      comparator))
+    println(isSorted(Array("a", "b", "b"),
+      comparator))
+    println(isSorted(Array("a", "c", "b"),
+      comparator))
+  }
+
   def isSorted[T](as: Array[T], ordered: (T, T) => Boolean): Boolean = {
     @annotation.tailrec
     def loop(n: Int): Boolean = {
@@ -10,15 +20,5 @@ object SortedArray extends App {
     }
 
     loop(0)
-  }
-
-  override def main(args: Array[String]): Unit = {
-    val comparator: (String, String) => Boolean = (a: String, b: String) => a.compareTo(b) <= 0
-    println(isSorted(Array("a", "b", "c"),
-      comparator))
-    println(isSorted(Array("a", "b", "b"),
-      comparator))
-    println(isSorted(Array("a", "c", "b"),
-      comparator))
   }
 }

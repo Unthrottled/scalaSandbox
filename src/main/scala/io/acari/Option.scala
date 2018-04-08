@@ -1,13 +1,12 @@
 package io.acari
 
 sealed trait Option[+T] {
+  def orElse[U >: T](ob: => Option[U]): Option[U] =
+    this map (Some(_)) getOrElse ob
+
   def map[U](f: T => U): Option[U] = this match {
     case None => None
     case (s: Some[T]) => Some(f(s.get))
-  }
-
-  def flatMap[U](f: T => Option[U]): Option[U] = {
-    map(f) getOrElse None
   }
 
   def getOrElse[U >: T](default: => U): U = this match {
@@ -15,11 +14,12 @@ sealed trait Option[+T] {
     case Some(t) => t
   }
 
-  def orElse[U >: T](ob: => Option[U]): Option[U] =
-    this map (Some(_)) getOrElse ob
-
   def filter(f: T => Boolean): Option[T] =
     flatMap(t => if (f(t)) Some(t) else None)
+
+  def flatMap[U](f: T => Option[U]): Option[U] = {
+    map(f) getOrElse None
+  }
 
 
 }

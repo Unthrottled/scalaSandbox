@@ -4,16 +4,6 @@ package io.acari
   * Forged in the flames of battle by alex.
   */
 sealed trait Either[+E, +T] {
-  def map[U](f: T => U): Either[E, U] = this match {
-    case Left(e) => Left(e)
-    case Right(t) => Right(f(t))
-  }
-
-  def flatMap[EE >: E, U](f: T => Either[EE, U]): Either[EE, U] = this match {
-    case Left(e) => Left(e)
-    case Right(t) => f(t)
-  }
-
   def orElse[EE >: E, U >: T](u: => Either[EE, U]): Either[EE, U] = this match {
     case Left(_) => u
     case Right(_) => this
@@ -25,6 +15,16 @@ sealed trait Either[+E, +T] {
   def sequence[E, T](es: List[Either[E, T]]): Either[E, List[T]] =
     List.reduceRight[Either[E, T], Either[E, List[T]]](es, Right(Nil))((e, lE) =>
       e.flatMap(t => lE.map(list => Cons(t, list))))
+
+  def map[U](f: T => U): Either[E, U] = this match {
+    case Left(e) => Left(e)
+    case Right(t) => Right(f(t))
+  }
+
+  def flatMap[EE >: E, U](f: T => Either[EE, U]): Either[EE, U] = this match {
+    case Left(e) => Left(e)
+    case Right(t) => f(t)
+  }
 
   def traverse[E, T, U](es: List[Either[E, T]])(f: T => Either[E, U]): Either[E, List[U]] =
     List.reduceRight[Either[E, T], Either[E, List[U]]](es, Right(Nil))((e, lE) =>
