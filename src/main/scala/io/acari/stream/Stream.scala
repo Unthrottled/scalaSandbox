@@ -26,6 +26,9 @@ trait Stream[+A] {
     case Cons(h, t) => if (f(h())) Some(h()) else t().find(f)
   }
 
+  def toList: io.acari.List[A] =
+    foldRight[io.acari.List[A]](io.acari.Nil())((t, u)=>io.acari.Cons(t, u))
+
   def take(n: Int): Stream[A] = ???
 
   def drop(n: Int): Stream[A] = ???
