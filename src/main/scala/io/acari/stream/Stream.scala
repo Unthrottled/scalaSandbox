@@ -26,10 +26,21 @@ trait Stream[+T] {
     case Cons(h, t) => if (f(h())) Some(h()) else t().find(f)
   }
 
-  def toList: io.acari.List[T] =
-    foldRight[io.acari.List[T]](io.acari.Nil())((t, u)=>io.acari.Cons(t, u))
-
-  def take(n: Int): Stream[T] = ???
+//  def toList: io.acari.List[T] =
+//    foldRight[io.acari.List[T]](io.acari.Nil())((t, u)=>io.acari.Cons(t, u))
+//
+//  def take(n: Int): Stream[T] = {
+//    @annotation.tailrec
+//    def go(stream: Stream[T], acc: Stream[T], m: Int): Stream[T] = {
+//      if(m < 1) acc
+//      else stream match {
+//          case Cons(h, t) => go(t(), Cons(h, acc), m -1)
+//          case Empty => acc
+//        }
+//    }
+//
+//    go(this, Empty, n)
+//  }
 
   def drop(n: Int): Stream[T] = ???
 
