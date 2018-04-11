@@ -110,5 +110,7 @@ object Stream extends App {
     println(listo)
     val takeList = stremo.take(3).toReversedList
     println(takeList)
+    val dropIt = stremo.drop(3).toList
+    println(dropIt)
   }
 }
