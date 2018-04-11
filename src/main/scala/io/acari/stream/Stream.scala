@@ -34,6 +34,15 @@ trait Stream[+T] {
   def toList: io.acari.List[T] =
     foldRight[io.acari.List[T]](io.acari.Nil)((t, u) => io.acari.Cons(t, u))
 
+  def toReversedList: List[T] = {
+    @annotation.tailrec
+    def go(stream: Stream[T], acc: List[T]): List[T] = stream match {
+      case Cons(head, tail) => go(tail(), head()::acc)
+      case _ => acc
+    }
+    go(this, List())
+  }
+
   def take(n: Int): Stream[T] = {
     @annotation.tailrec
     def go(stream: Stream[T], acc: () => Stream[T], m: Int): Stream[T] = {
@@ -95,7 +104,7 @@ object Stream extends App {
     val stremo = Stream(1, 2, 3, 4, 5)
     val listo = stremo.toList
     println(listo)
-    val takeList = stremo.take(3).toList
+    val takeList = stremo.take(3).toReversedList
     println(takeList)
   }
 }
