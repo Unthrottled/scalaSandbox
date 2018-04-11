@@ -84,5 +84,7 @@ object Stream extends App {
     val stremo = Stream(1,2,3,4,5)
     val listo = stremo.toList
     println(listo)
+    val takeList = stremo.take(3).toList
+    println(takeList)
   }
 }
