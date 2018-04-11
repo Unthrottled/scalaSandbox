@@ -56,7 +56,11 @@ trait Stream[+T] {
     go(this, () => Empty, n)
   }
 
-  def drop(n: Int): Stream[T] = ???
+  @annotation.tailrec
+  final def drop(n: Int): Stream[T] = this match {
+    case Cons(_, tail)=> if (n > 1 ) tail() drop(n -1)  else this
+    case _ => this
+  }
 
   def takeWhile(p: T => Boolean): Stream[T] = ???
 
