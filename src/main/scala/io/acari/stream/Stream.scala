@@ -13,7 +13,7 @@ trait Stream[+T] {
 
   def apply[T](as: T*): Stream[T] =
     if (as.isEmpty) Empty
-    else Cons(()=>as.head, ()=>apply(as.tail: _*))
+    else Cons(() => as.head, () => apply(as.tail: _*))
 
 
   def foldRight[U](z: => U)(f: (T, => U) => U): U = // The arrow `=>` in front of the argument type `U` means that the function `f` takes its second argument by name and may choose not to evaluate it.
@@ -32,16 +32,16 @@ trait Stream[+T] {
   }
 
   def toList: io.acari.List[T] =
-    foldRight[io.acari.List[T]](io.acari.Nil)((t, u)=>io.acari.Cons(t, u))
+    foldRight[io.acari.List[T]](io.acari.Nil)((t, u) => io.acari.Cons(t, u))
 
-    def take(n: Int): Stream[T] = {
-      @annotation.tailrec
-      def go(stream: Stream[T], acc: () => Stream[T], m: Int): Stream[T] = {
-      if(m < 1) acc()
+  def take(n: Int): Stream[T] = {
+    @annotation.tailrec
+    def go(stream: Stream[T], acc: () => Stream[T], m: Int): Stream[T] = {
+      if (m < 1) acc()
       else stream match {
-          case Cons(h, t) => go(t(), () => Cons(h, acc), m -1)
-          case Empty => acc()
-        }
+        case Cons(h, t) => go(t(), () => Cons(h, acc), m - 1)
+        case Empty => acc()
+      }
     }
 
     go(this, () => Empty, n)
@@ -67,6 +67,14 @@ trait Stream[+T] {
 object Stream extends App {
   val ones: Stream[Int] = Stream.cons(1, ones)
 
+  /**
+    * Smart Constructor, cache's head option.
+    *
+    * @param hd
+    * @param tl
+    * @tparam T
+    * @return
+    */
   def cons[T](hd: => T, tl: => Stream[T]): Stream[T] = {
     lazy val head = hd
     lazy val tail = tl
@@ -84,7 +92,7 @@ object Stream extends App {
   def unfold[T, S](z: S)(f: S => Option[(T, S)]): Stream[T] = ???
 
   override def main(args: Array[String]): Unit = {
-    val stremo = Stream(1,2,3,4,5)
+    val stremo = Stream(1, 2, 3, 4, 5)
     val listo = stremo.toList
     println(listo)
     val takeList = stremo.take(3).toList
