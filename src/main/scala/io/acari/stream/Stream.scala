@@ -31,9 +31,9 @@ trait Stream[+T] {
     case Cons(h, t) => if (f(h())) Some(h()) else t().find(f)
   }
 
-//  def toList: io.acari.List[T] =
-//    foldRight[io.acari.List[T]](io.acari.Nil())((t, u)=>io.acari.Cons(t, u))
-//
+  def toList: io.acari.List[T] =
+    foldRight[io.acari.List[T]](io.acari.Nil)((t, u)=>io.acari.Cons(t, u))
+
     def take(n: Int): Stream[T] = {
       @annotation.tailrec
       def go(stream: Stream[T], acc: () => Stream[T], m: Int): Stream[T] = {
@@ -82,6 +82,7 @@ object Stream extends App {
 
   override def main(args: Array[String]): Unit = {
     val stremo = Stream(1,2,3,4,5)
-    
+    val listo = stremo.toList
+    println(listo)
   }
 }
