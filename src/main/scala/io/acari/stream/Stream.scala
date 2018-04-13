@@ -113,5 +113,10 @@ object Stream extends App {
     println(takeList)
     val dropIt = stremo.drop(3).toList
     println(dropIt)
+
+    //TODO: FIGURE OUT INFINITE STREAMS
+//    var infiniteStream: Stream[Int] = Stream.cons(1, infiniteStream)
+//    val listFromTerminal = infiniteStream.take(10).toReversedList
+//    println(listFromTerminal)
   }
 }
