@@ -16,6 +16,14 @@ trait Stream[+T] {
     else Cons(() => as.head, () => apply(as.tail: _*))
 
 
+  def map[U](f: T => U): Stream[U] = ???
+
+  def filter(f: T => Boolean): Stream[T] = ???
+
+  def append[U >: T](s: => Stream[U]): Stream[U] = ???
+
+  def flatMap[U](f: T => Stream[U]): Stream[U] = ???
+
   def foldRight[U](z: => U)(f: (T, => U) => U): U = // The arrow `=>` in front of the argument type `U` means that the function `f` takes its second argument by name and may choose not to evaluate it.
     this match {
       case Cons(h, t) => f(h(), t().foldRight(z)(f)) // If `f` doesn't evaluate its second argument, the recursion never occurs.
@@ -118,5 +126,7 @@ object Stream extends App {
 //    var infiniteStream: Stream[Int] = Stream.cons(1, infiniteStream)
 //    val listFromTerminal = infiniteStream.take(10).toReversedList
 //    println(listFromTerminal)
+
+
   }
 }
