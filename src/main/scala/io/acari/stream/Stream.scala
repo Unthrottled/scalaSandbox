@@ -15,8 +15,8 @@ trait Stream[+T] {
     if (as.isEmpty) Empty
     else Cons(() => as.head, () => apply(as.tail: _*))
 
-
-  def map[U](f: T => U): Stream[U] = ???
+//  def map[U](f: T => U): Stream[U] =
+//    foldRight(Empty[U])((t, u)=> Cons(f(t), u))
 
   def filter(f: T => Boolean): Stream[T] = ???
 
@@ -109,6 +109,10 @@ object Stream extends App {
     if (as.isEmpty) empty
     else cons(as.head, apply(as.tail: _*))
 
+  def forever[T](t: T): Stream[T] = {
+    lazy val self: Stream[T] = Cons(()=>t, ()=>self)
+    self
+  }
   def from(n: Int): Stream[Int] = ???
 
   def unfold[T, S](z: S)(f: S => Option[(T, S)]): Stream[T] = ???
@@ -122,10 +126,9 @@ object Stream extends App {
     val dropIt = stremo.drop(3).toList
     println(dropIt)
 
-    //TODO: FIGURE OUT INFINITE STREAMS
-//    var infiniteStream: Stream[Int] = Stream.cons(1, infiniteStream)
-//    val listFromTerminal = infiniteStream.take(10).toReversedList
-//    println(listFromTerminal)
+    var infiniteStream: Stream[Int] = forever(1)
+    val listFromTerminal = infiniteStream.take(10).toReversedList
+    println(listFromTerminal)
 
 
   }
