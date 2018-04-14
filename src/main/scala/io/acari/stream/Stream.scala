@@ -124,16 +124,10 @@ object Stream extends App {
     Cons(() => n, () => from(n + 1))
 
   def fibs(): Stream[Int] = {
-    def go(n: Int, m: Int): Stream[Int] = {
-      if (n == 0) Cons(() => 0, () => go(1, 0))
-      else if (n == 1 && m == 0) Cons(() => 1, () => go(1, 1))
-      else {
-        val i = n + m
-        Cons(() => m, () => go(m, i))
-      }
-    }
+    def go(n: Int, m: Int): Stream[Int] =
+        Cons(() => n, () => go(m, n + m))
 
-    go(0, 0)
+    go(0, 1)
   }
 
   def unfold[T, S](z: S)(f: S => Option[(T, S)]): Stream[T] = ???
