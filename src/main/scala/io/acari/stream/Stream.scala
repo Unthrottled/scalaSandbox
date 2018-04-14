@@ -132,9 +132,11 @@ object Stream extends App {
   }
 
 
-  def unfold[U](z: U)(f: U => Option[U]): Stream[U] =
-    f(z).map(u => Cons(() => u, () => unfold(u)(f))).getOrElse(Empty())
-
+  def unfold[T, U](z: U)(f: U => Option[(T, U)]): Stream[U] =
+    f(z) match {
+      case Some((t,u)) => Cons(() => u, () => unfold(u)(f))
+      case _ => Empty
+    }
 
   override def main(args: Array[String]): Unit = {
     val streamo = Stream(1, 2, 3, 4, 5)
@@ -164,6 +166,7 @@ object Stream extends App {
 
     println(from(65).take(5).toReversedList)
     println(fibs().take(7).toReversedList)
-    println(unfold(0)(i=>Some(i+1)).take(6).toReversedList)
+    println(unfold(0)((i)=>Some((i, i+1))).take(6).toReversedList)//from
+    println(unfold((0,1))((i)=>Some((i,  i))).take(6).toReversedList)//from
   }
 }
