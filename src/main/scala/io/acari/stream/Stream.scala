@@ -130,6 +130,10 @@ object Stream extends App {
     val listFromTerminal = infiniteStream.take(10).toReversedList
     println(listFromTerminal)
 
+    lazy val alsoInfinite: Stream[Int] = Stream.cons(1, alsoInfinite)
+    val listFromAlsoTerminal = alsoInfinite.take(5).toReversedList
+    println(listFromAlsoTerminal)
+
 
   }
 }
