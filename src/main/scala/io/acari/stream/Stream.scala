@@ -11,7 +11,7 @@ case class Cons[+T](h: () => T, t: () => Stream[T]) extends Stream[T]
 
 trait Stream[+T] {
 
-  def apply[T](as: T*): Stream[T] =
+  def apply[U](as: U*): Stream[U] =
     if (as.isEmpty) Empty
     else Cons(() => as.head, () => apply(as.tail: _*))
 
@@ -22,7 +22,8 @@ trait Stream[+T] {
     foldRight(Empty[T]())((head, tail) =>
       if (f(head)) Cons(() => head, () => tail) else tail)
 
-  def append[U >: T](s: => Stream[U]): Stream[U] = ???
+  def append[U >: T](s: => Stream[U]): Stream[U] =
+    foldRight(s)((head, tail) => Cons(() => head, () => tail))
 
   def flatMap[U](f: T => Stream[U]): Stream[U] = ???
 
@@ -140,5 +141,9 @@ object Stream extends App {
 
     println(stremo.map(_ + 1).toList)
     println(stremo.map(_ + 1).filter(_ < 4).toList)
+    println(stremo.append(stremo)
+      .map(_ + 2)
+      .filter(_ < 6)
+      .toList)
   }
 }
