@@ -75,7 +75,8 @@ trait Stream[+T] {
     case _ => this
   }
 
-  def takeWhile(p: T => Boolean): Stream[T] = ???
+  def takeWhile(p: T => Boolean): Stream[T] =
+    foldRight(Empty[T]())((head, tail)=> if(p(head)) Cons(()=>head,()=> tail) else tail)
 
   def forAll(p: T => Boolean): Boolean =
     foldRight(true)((t, bool) => p(t) && bool) //short circuit terminates the evaluation of the loop as false && anything is false.
