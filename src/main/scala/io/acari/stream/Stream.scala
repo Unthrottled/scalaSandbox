@@ -26,7 +26,7 @@ trait Stream[+T] {
     foldRight(s)((head, tail) => Cons(() => head, () => tail))
 
   def flatMap[U](f: T => Stream[U]): Stream[U] =
-    foldRight(Empty[U]())((head, tail)=>f(head) append tail)
+    foldRight(Empty[U]())((head, tail) => f(head) append tail)
 
   def foldRight[U](z: => U)(f: (T, => U) => U): U = // The arrow `=>` in front of the argument type `U` means that the function `f` takes its second argument by name and may choose not to evaluate it.
     this match {
@@ -76,7 +76,7 @@ trait Stream[+T] {
   }
 
   def takeWhile(p: T => Boolean): Stream[T] =
-    foldRight(Empty[T]())((head, tail)=> if(p(head)) Cons(()=>head,()=> tail) else tail)
+    foldRight(Empty[T]())((head, tail) => if (p(head)) Cons(() => head, () => tail) else tail)
 
   def forAll(p: T => Boolean): Boolean =
     foldRight(true)((t, bool) => p(t) && bool) //short circuit terminates the evaluation of the loop as false && anything is false.
@@ -121,7 +121,20 @@ object Stream extends App {
   }
 
   def from(n: Int): Stream[Int] =
-    Cons(()=>n, ()=>from(n+1))
+    Cons(() => n, () => from(n + 1))
+
+  def fibs(): Stream[Int] = {
+    def go(n: Int, m: Int): Stream[Int] = {
+      if (n == 0) Cons(() => 0, () => go(1, 0))
+      else if (n == 1 && m == 0) Cons(() => 1, () => go(1, 1))
+      else {
+        val i = n + m
+        Cons(() => m, () => go(m, i))
+      }
+    }
+
+    go(0, 0)
+  }
 
   def unfold[T, S](z: S)(f: S => Option[(T, S)]): Stream[T] = ???
 
@@ -149,8 +162,9 @@ object Stream extends App {
       .filter(_ < 6)
       .toList)
 
-    println(stremo.flatMap(i=>forever(i).take(i)).toList)
+    println(stremo.flatMap(i => forever(i).take(i)).toList)
 
     println(from(65).take(5).toReversedList)
+    println(fibs().take(7).toReversedList)
   }
 }
