@@ -25,7 +25,8 @@ trait Stream[+T] {
   def append[U >: T](s: => Stream[U]): Stream[U] =
     foldRight(s)((head, tail) => Cons(() => head, () => tail))
 
-  def flatMap[U](f: T => Stream[U]): Stream[U] = ???
+  def flatMap[U](f: T => Stream[U]): Stream[U] =
+    foldRight(Empty[U]())((head, tail)=>f(head) append tail)
 
   def foldRight[U](z: => U)(f: (T, => U) => U): U = // The arrow `=>` in front of the argument type `U` means that the function `f` takes its second argument by name and may choose not to evaluate it.
     this match {
@@ -145,5 +146,7 @@ object Stream extends App {
       .map(_ + 2)
       .filter(_ < 6)
       .toList)
+
+    println(stremo.flatMap(i=>forever(i).take(i)).toList)
   }
 }
