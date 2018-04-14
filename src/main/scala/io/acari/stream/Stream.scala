@@ -90,6 +90,7 @@ trait Stream[+T] {
   // writing your own function signatures.
 
   def startsWith[U](s: Stream[U]): Boolean = ???
+
 }
 
 object Stream extends App {
@@ -125,12 +126,15 @@ object Stream extends App {
 
   def fibs(): Stream[Int] = {
     def go(n: Int, m: Int): Stream[Int] =
-        Cons(() => n, () => go(m, n + m))
+      Cons(() => n, () => go(m, n + m))
 
     go(0, 1)
   }
 
-  def unfold[T, S](z: S)(f: S => Option[(T, S)]): Stream[T] = ???
+
+  def unfold[U](z: U)(f: U => Option[U]): Stream[U] =
+    f(z).map(u => Cons(() => u, () => unfold(u)(f))).getOrElse(Empty())
+
 
   override def main(args: Array[String]): Unit = {
     val stremo = Stream(1, 2, 3, 4, 5)
@@ -160,5 +164,6 @@ object Stream extends App {
 
     println(from(65).take(5).toReversedList)
     println(fibs().take(7).toReversedList)
+    println(unfold(0)(i=>Some(i+1)).take(6).toReversedList)
   }
 }
