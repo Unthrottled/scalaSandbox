@@ -15,8 +15,8 @@ trait Stream[+T] {
     if (as.isEmpty) Empty
     else Cons(() => as.head, () => apply(as.tail: _*))
 
-//  def map[U](f: T => U): Stream[U] =
-//    foldRight(Empty[U])((t, u)=> Cons(f(t), u))
+  def map[U](f: T => U): Stream[U] =
+    foldRight(Empty[U]())((t, u)=> Cons(()=>f(t),()=>u))
 
   def filter(f: T => Boolean): Stream[T] = ???
 
@@ -131,9 +131,9 @@ object Stream extends App {
     println(listFromTerminal)
 
     lazy val alsoInfinite: Stream[Int] = Stream.cons(1, alsoInfinite)
-    val listFromAlsoTerminal = alsoInfinite.take(5).toReversedList
+    val listFromAlsoTerminal = alsoInfinite.take(5).map(_+1).toReversedList
     println(listFromAlsoTerminal)
 
-
+    println(stremo.map(_+1).toList)
   }
 }
