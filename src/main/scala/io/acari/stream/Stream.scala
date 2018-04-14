@@ -16,9 +16,11 @@ trait Stream[+T] {
     else Cons(() => as.head, () => apply(as.tail: _*))
 
   def map[U](f: T => U): Stream[U] =
-    foldRight(Empty[U]())((t, u)=> Cons(()=>f(t),()=>u))
+    foldRight(Empty[U]())((t, u) => Cons(() => f(t), () => u))
 
-  def filter(f: T => Boolean): Stream[T] = ???
+  def filter(f: T => Boolean): Stream[T] =
+    foldRight(Empty[T]())((head, tail) =>
+      if (f(head)) Cons(() => head, () => tail) else tail)
 
   def append[U >: T](s: => Stream[U]): Stream[U] = ???
 
@@ -45,9 +47,10 @@ trait Stream[+T] {
   def toReversedList: List[T] = {
     @annotation.tailrec
     def go(stream: Stream[T], acc: List[T]): List[T] = stream match {
-      case Cons(head, tail) => go(tail(), head()::acc)
+      case Cons(head, tail) => go(tail(), head() :: acc)
       case _ => acc
     }
+
     go(this, List())
   }
 
@@ -66,14 +69,14 @@ trait Stream[+T] {
 
   @annotation.tailrec
   final def drop(n: Int): Stream[T] = this match {
-    case Cons(_, tail)=> if (n > 1 ) tail() drop(n -1)  else this
+    case Cons(_, tail) => if (n > 1) tail() drop (n - 1) else this
     case _ => this
   }
 
   def takeWhile(p: T => Boolean): Stream[T] = ???
 
   def forAll(p: T => Boolean): Boolean =
-    foldRight(true)((t, bool)=> p(t) && bool)//short circuit terminates the evaluation of the loop as false && anything is false.
+    foldRight(true)((t, bool) => p(t) && bool) //short circuit terminates the evaluation of the loop as false && anything is false.
 
   def headOption: Option[T] = this match {
     case Empty => None
@@ -110,9 +113,10 @@ object Stream extends App {
     else cons(as.head, apply(as.tail: _*))
 
   def forever[T](t: T): Stream[T] = {
-    lazy val self: Stream[T] = Cons(()=>t, ()=>self)
+    lazy val self: Stream[T] = Cons(() => t, () => self)
     self
   }
+
   def from(n: Int): Stream[Int] = ???
 
   def unfold[T, S](z: S)(f: S => Option[(T, S)]): Stream[T] = ???
@@ -131,9 +135,10 @@ object Stream extends App {
     println(listFromTerminal)
 
     lazy val alsoInfinite: Stream[Int] = Stream.cons(1, alsoInfinite)
-    val listFromAlsoTerminal = alsoInfinite.take(5).map(_+1).toReversedList
+    val listFromAlsoTerminal = alsoInfinite.take(5).map(_ + 1).toReversedList
     println(listFromAlsoTerminal)
 
-    println(stremo.map(_+1).toList)
+    println(stremo.map(_ + 1).toList)
+    println(stremo.map(_ + 1).filter(_ < 4).toList)
   }
 }
