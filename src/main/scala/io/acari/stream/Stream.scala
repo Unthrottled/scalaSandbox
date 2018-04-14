@@ -120,7 +120,8 @@ object Stream extends App {
     self
   }
 
-  def from(n: Int): Stream[Int] = ???
+  def from(n: Int): Stream[Int] =
+    Cons(()=>n, ()=>from(n+1))
 
   def unfold[T, S](z: S)(f: S => Option[(T, S)]): Stream[T] = ???
 
@@ -149,5 +150,7 @@ object Stream extends App {
       .toList)
 
     println(stremo.flatMap(i=>forever(i).take(i)).toList)
+
+    println(from(65).take(5).toReversedList)
   }
 }
