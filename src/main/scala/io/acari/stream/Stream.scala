@@ -137,12 +137,12 @@ object Stream extends App {
 
 
   override def main(args: Array[String]): Unit = {
-    val stremo = Stream(1, 2, 3, 4, 5)
-    val listo = stremo.toList
+    val streamo = Stream(1, 2, 3, 4, 5)
+    val listo = streamo.toList
     println(listo)
-    val takeList = stremo.take(3).toReversedList
+    val takeList = streamo.take(3).toReversedList
     println(takeList)
-    val dropIt = stremo.drop(3).toList
+    val dropIt = streamo.drop(3).toList
     println(dropIt)
 
     var infiniteStream: Stream[Int] = forever(1)
@@ -153,14 +153,14 @@ object Stream extends App {
     val listFromAlsoTerminal = alsoInfinite.take(5).map(_ + 1).toReversedList
     println(listFromAlsoTerminal)
 
-    println(stremo.map(_ + 1).toList)
-    println(stremo.map(_ + 1).filter(_ < 4).toList)
-    println(stremo.append(stremo)
+    println(streamo.map(_ + 1).toList)
+    println(streamo.map(_ + 1).filter(_ < 4).toList)
+    println(streamo.append(streamo)
       .map(_ + 2)
       .filter(_ < 6)
       .toList)
 
-    println(stremo.flatMap(i => forever(i).take(i)).toList)
+    println(streamo.flatMap(i => forever(i).take(i)).toList)
 
     println(from(65).take(5).toReversedList)
     println(fibs().take(7).toReversedList)
