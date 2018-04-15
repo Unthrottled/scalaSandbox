@@ -54,9 +54,16 @@ object RNG {
     (ranbo.toDouble / ofTen, rng1)
   }
 
-  def intDouble(rng: RNG): ((Int, Double), RNG) = ???
+  def intDouble(rng: RNG): ((Int, Double), RNG) = {
+    val (i, rng1) = rng.nextInt
+    val (d, rng2) = double(rng1)
+    ((i, d), rng2)
+  }
 
-  def doubleInt(rng: RNG): ((Double, Int), RNG) = ???
+  def doubleInt(rng: RNG): ((Double, Int), RNG) = {
+    val ((i, d), rng1) = intDouble(rng)
+    ((d, i), rng1)
+  }
 
   def double3(rng: RNG): ((Double, Double, Double), RNG) = ???
 
