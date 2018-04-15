@@ -4,12 +4,12 @@ trait RNG {
   def nextInt: (Int, RNG) // Should generate a random `Int`. We'll later define other functions in terms of `nextInt`.
 }
 
-object RNG extends App {
+object RNG {
 
 
   // NB - this was called SimpleRNG in the book text
 
-  override def main(args: Array[String]): Unit = {
+   def main(args: Array[String]): Unit = {
     val rng = Simple(9001L)
     val (i1, rng1) = nonNegativeInt(rng)
     println(i1)
@@ -41,8 +41,7 @@ object RNG extends App {
 
   def nonNegativeInt(rng: RNG): (Int, RNG) ={
     val (i1, rng1) = rng.nextInt
-    val r: Int = if(i1 == Int.MinValue) -(i1 + 1) else if( i1 < 0)-i1 else i1
-    (r, rng1)
+    (if(i1 < 0) -(i1 + 1) else i1, rng1)
   }
 
   def double(rng: RNG): (Double, RNG) = ???

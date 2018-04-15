@@ -93,7 +93,7 @@ trait Stream[+T] {
 
 }
 
-object Stream extends App {
+object Stream {
   val ones: Stream[Int] = Stream.cons(1, ones)
 
   /**
@@ -138,7 +138,7 @@ object Stream extends App {
       case _ => Empty
     }
 
-  override def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit = {
     val streamo = Stream(1, 2, 3, 4, 5)
     val listo = streamo.toList
     println(listo)
