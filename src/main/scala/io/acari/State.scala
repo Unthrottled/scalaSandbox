@@ -77,10 +77,11 @@ object RNG {
   }
 
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
-    val tuple = nonNegativeInt(rng)
-    Stream.unfold(tuple) { case (f0, f1) => scala.Some((f0, nonNegativeInt(f1))) }
+    val tFirst = nonNegativeInt(rng)
+    Stream.unfold(tFirst) { case (f0, f1) => scala.Some((f0, nonNegativeInt(f1))) }
       .take(count - 1)
-      .foldRight((List(tuple._1), tuple._2))((i, t) => (io.acari.Cons(i._1, t._1), t._2))
+      .foldRight((List(tFirst._1), tFirst._2))((i, t) =>
+        (io.acari.Cons(i._1, t._1), t._2))
   }
 
   def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = ???
