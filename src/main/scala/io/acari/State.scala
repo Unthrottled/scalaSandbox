@@ -1,5 +1,7 @@
 package io.acari
 
+import io.acari.stream._
+
 trait RNG {
   def nextInt: (Int, RNG) // Should generate a random `Int`. We'll later define other functions in terms of `nextInt`.
 }
@@ -19,6 +21,8 @@ object RNG {
     println(j1)
     val (j2, rng_2) = double(rng1)
     println(j2)
+    val (iList, rng69) = ints(5)(rng)
+    println(iList)
   }
 
   case class Simple(seed: Long) extends RNG {
@@ -72,7 +76,12 @@ object RNG {
     ((d, d2, d3), rng3)
   }
 
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) = ???
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    val tuple = nonNegativeInt(rng)
+    Stream.unfold(tuple) { case (f0, f1) => scala.Some((f0, nonNegativeInt(f1))) }
+      .take(count - 1)
+      .foldRight((List(tuple._1), tuple._2))((i, t) => (io.acari.Cons(i._1, t._1), t._2))
+  }
 
   def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = ???
 
