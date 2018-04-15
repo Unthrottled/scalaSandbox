@@ -4,8 +4,18 @@ trait RNG {
   def nextInt: (Int, RNG) // Should generate a random `Int`. We'll later define other functions in terms of `nextInt`.
 }
 
-object RNG {
+object RNG extends App {
+
+
   // NB - this was called SimpleRNG in the book text
+
+  override def main(args: Array[String]): Unit = {
+    val rng = Simple(9001L)
+    val (i1, rng1) = nonNegativeInt(rng)
+    println(i1)
+    val (i2, ng2) = nonNegativeInt(rng1)
+    println(i2)
+  }
 
   case class Simple(seed: Long) extends RNG {
     def nextInt: (Int, RNG) = {
@@ -29,7 +39,11 @@ object RNG {
       (f(a), rng2)
     }
 
-  def nonNegativeInt(rng: RNG): (Int, RNG) = ???
+  def nonNegativeInt(rng: RNG): (Int, RNG) ={
+    val (i1, rng1) = rng.nextInt
+    val r: Int = if(i1 == Int.MinValue) -(i1 + 1) else if( i1 < 0)-i1 else i1
+    (r, rng1)
+  }
 
   def double(rng: RNG): (Double, RNG) = ???
 
