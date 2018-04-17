@@ -102,7 +102,8 @@ object RNG {
   }
 
 
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
+    List.reduceLeft(fs, unit(List[A]()))((u,t)=>map2(u,t)((a,b)=>io.acari.Cons(b,a)))
 
   def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = ???
 }
