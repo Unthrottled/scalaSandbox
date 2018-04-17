@@ -52,10 +52,19 @@ object RNG {
     (if (i1 < 0) -(i1 + 1) else i1, rng1)
   }
 
+  def nonNegativeInt2(rng: RNG): Rand[Int] = {
+    val (i1, rng1) = rng.nextInt
+    unit(if (i1 < 0) -(i1 + 1) else i1)
+  }
+
   def double(rng: RNG): (Double, RNG) = {
     val (ranbo, rng1) = nonNegativeInt(rng)
     val ofTen = Math.ceil(Math.log10(ranbo.toDouble)) * 10D
     (ranbo.toDouble / ofTen, rng1)
+  }
+
+  def double2(rNG: RNG): Rand[Double] = {
+    map(nonNegativeInt2(rNG))(ranbo=> ranbo / (Math.ceil(Math.log10(ranbo.toDouble)) * 10))
   }
 
   def intDouble(rng: RNG): ((Int, Double), RNG) = {
