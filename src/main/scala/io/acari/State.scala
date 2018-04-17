@@ -121,7 +121,7 @@ case class State[S, +A](run: S => (A, S)) {
     ???
 
   def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
-    ???
+    this.flatMap((a)=>sb.map(b=>f(a,b)))
 
   def flatMap[B](f: A => State[S, B]): State[S, B] =
     ???
