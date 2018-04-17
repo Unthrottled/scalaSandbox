@@ -105,7 +105,12 @@ object RNG {
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
     List.reduceLeft(fs, unit(List[A]()))((u,t)=>map2(u,t)((a,b)=>io.acari.Cons(b,a)))
 
-  def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = ???
+  def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = {
+    rng => {
+      val (a, rng2) = f(rng)
+      g(a)(rng2)
+    }
+  }
 }
 
 case class State[S, +A](run: S => (A, S)) {
