@@ -42,7 +42,7 @@ object RNG {
     butt => (a, butt)
 
   def map[A, B](s: Rand[A])(f: A => B): Rand[B] =
-    flatMap(s)(a=>unit(f(a)))
+    flatMap(s)(a => unit(f(a)))
 
   def nonNegativeInt(rng: RNG): (Int, RNG) = {
     val (i1, rng1) = rng.nextInt
@@ -61,7 +61,7 @@ object RNG {
   }
 
   def double2(rNG: RNG): Rand[Double] = {
-    map(nonNegativeInt2(rNG))(ranbo=> ranbo / (Math.ceil(Math.log10(ranbo.toDouble)) * 10))
+    map(nonNegativeInt2(rNG))(ranbo => ranbo / (Math.ceil(Math.log10(ranbo.toDouble)) * 10))
   }
 
   def intDouble(rng: RNG): ((Int, Double), RNG) = {
@@ -90,13 +90,13 @@ object RNG {
         (io.acari.Cons(i._1, t._1), t._2))
   }
 
-  def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] ={
-    flatMap(ra)(a=>map(rb)(b=>f(a,b)))
+  def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
+    flatMap(ra)(a => map(rb)(b => f(a, b)))
   }
 
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
-    List.reduceLeft(fs, unit(List[A]()))((u,t)=>map2(u,t)((a,b)=>io.acari.Cons(b,a)))
+    List.reduceLeft(fs, unit(List[A]()))((u, t) => map2(u, t)((a, b) => io.acari.Cons(b, a)))
 
   def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = {
     rng => {
@@ -106,9 +106,9 @@ object RNG {
   }
 
   def nonNegativeLessThan(n: Int): Rand[Int] =
-    flatMap(nonNegativeInt){ a=>
+    flatMap(nonNegativeInt) { a =>
       val mod = a % n
-      if( a + (n - 1)- mod >= 0)
+      if (a + (n - 1) - mod >= 0)
         unit(mod)
       else
         nonNegativeLessThan(n)
@@ -118,16 +118,19 @@ object RNG {
 
 case class State[S, +A](run: S => (A, S)) {
   def map[B](f: A => B): State[S, B] =
-    flatMap(a=>State.unit(f(a)))
+    flatMap(a => State.unit(f(a)))
 
   def map2[B, C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
-    this.flatMap((a)=>sb.map(b=>f(a,b)))
+    this.flatMap((a) => sb.map(b => f(a, b)))
 
   def flatMap[B](f: A => State[S, B]): State[S, B] = State(s => {
     val (a, s3) = run(s)
     f(a) run s3
   })
 
+  def sequence[A](fs: List[State[S, A]]): State[S, List[A]] =
+    List.reduceRight(fs, State.unit[S, List[A]](List()))((u, t) =>
+      u.flatMap(l => t.map(a => io.acari.Cons(l, a))))
 }
 
 sealed trait Input
@@ -141,8 +144,8 @@ case class Machine(locked: Boolean, candies: Int, coins: Int)
 object State {
   type Rand[A] = State[RNG, A]
 
-  def unit[S, A](a: A): State[S, A]=
-    State(s=>(a, s))
+  def unit[S, A](a: A): State[S, A] =
+    State(s => (a, s))
 
   def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = ???
 }
