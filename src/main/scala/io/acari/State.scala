@@ -147,5 +147,6 @@ object State {
   def unit[S, A](a: A): State[S, A] =
     State(s => (a, s))
 
+  //todo:this!
   def simulateMachine(inputs: List[Input]): State[Machine, (Int, Int)] = ???
 }
