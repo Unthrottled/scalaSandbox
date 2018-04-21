@@ -1,10 +1,21 @@
 package io.acari.parallelism
 
-import java.util.concurrent.{Callable, CountDownLatch, ExecutorService}
+import java.util.concurrent.{Callable, CountDownLatch, ExecutorService, Executors}
+
+import io.acari.parallelism.Nonblocking.Par.asyncF
 
 import scala.language.implicitConversions
 
-object Nonblocking {
+object Nonblocking extends App {
+
+  override def main(args: Array[String]): Unit = {
+    val transform = asyncF[String, Int](a=>a.length)
+    val trasnformed = transform("ayy lemon")
+    val executor = Executors.newSingleThreadExecutor
+    val inty = Par.run(executor)(trasnformed)
+    println(inty)
+    executor.shutdown()
+  }
 
   trait Future[+A] {
     private[parallelism] def apply(k: A => Unit): Unit
