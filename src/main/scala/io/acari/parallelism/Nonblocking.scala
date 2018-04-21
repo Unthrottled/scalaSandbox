@@ -115,7 +115,7 @@ object Nonblocking extends App {
     }
 
     def sequence[A](as: List[Par[A]]): Par[List[A]] =
-      map(sequenceBalanced(as.toIndexedSeq))(_.toList)
+      as.foldLeft(unit(List[A]()))((pList, pA)=>map2(pA, pList)(_ :: _))
 
     // exercise answers
 
