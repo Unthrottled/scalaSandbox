@@ -15,7 +15,6 @@ object Nonblocking extends App {
     val inty = Par.run(executor)(trasnformed)
     println(inty)
     executor.shutdown()
-    
   }
 
   trait Future[+A] {
