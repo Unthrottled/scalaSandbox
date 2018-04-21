@@ -1,7 +1,7 @@
 package io.acari.parallelism
 
 import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
-import java.util.concurrent.{Callable, ExecutorService}
+import java.util.concurrent.{Callable, ExecutorService, Executors}
 
 import scala.annotation.tailrec
 
@@ -96,7 +96,16 @@ final class Actor[A](strategy: Strategy)(handler: A => Unit, onError: Throwable 
 
 private class Node[A](var a: A = null.asInstanceOf[A]) extends AtomicReference[Node[A]]
 
-object Actor {
+object Actor extends App {
+
+
+  override def main(args: Array[String]): Unit = {
+    val executionStrategy = Executors.newSingleThreadExecutor()
+    val echoer = Actor[String](executionStrategy){
+      thing => {println(s"Got this message: '$thing'"); executionStrategy.shutdown()}
+    }
+    echoer ! "Ayy lemon, it's a prank bro'"
+  }
 
   /** Create an `Actor` backed by the given `ExecutorService`. */
   def apply[A](es: ExecutorService)(handler: A => Unit, onError: Throwable => Unit = throw(_)): Actor[A] =
