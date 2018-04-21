@@ -117,6 +117,8 @@ object Nonblocking extends App {
     def sequence[A](as: List[Par[A]]): Par[List[A]] =
       as.foldLeft(unit(List[A]()))((pList, pA)=>map2(pA, pList)(_ :: _))
 
+    def parFilter[A](as: List[A])(f: A => Boolean): Par[List[A]] = ???
+    
     // exercise answers
 
     /*
