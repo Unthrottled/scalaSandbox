@@ -65,7 +65,7 @@ object Nonblocking extends App {
      * asynchronously, using the given `ExecutorService`.
      */
     def eval(es: ExecutorService)(r: => Unit): Unit =
-      es.submit(new Callable[Unit] { def call = r })
+      es.submit(new Callable[Unit] { def call: Unit = r })
 
 
     def map2[A,B,C](p: Par[A], p2: Par[B])(f: (A,B) => C): Par[C] =
@@ -138,12 +138,13 @@ object Nonblocking extends App {
      * about `t(es)`? What about `t(es)(cb)`?
      */
     def choice[A](p: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] =
-      es => new Future[A] {
-        def apply(cb: A => Unit): Unit =
-          p(es) { b =>
-            if (b) eval(es) { t(es)(cb) }
-            else eval(es) { f(es)(cb) }
-          }
+      es => (cb: A => Unit) => p(es) { b =>
+        if (b) eval(es) {
+          t(es)(cb)
+        }
+        else eval(es) {
+          f(es)(cb)
+        }
       }
 
     def choiceN[A](p: Par[Int])(ps: List[Par[A]]): Par[A] = ???
