@@ -167,10 +167,7 @@ object Nonblocking extends App {
 
     def choiceN[A](p: Par[Int])(ps: List[Par[A]]): Par[A] =
       es => (cb: A => Unit) => p(es) { index =>
-        println("ohh snap!")
-        eval(es) {
-          ps(index)
-        }
+        map2(ps(index), unit())
       }
 
     def choiceViaChoiceN[A](a: Par[Boolean])(ifTrue: Par[A], ifFalse: Par[A]): Par[A] =
