@@ -9,24 +9,28 @@ import scala.language.implicitConversions
 object Nonblocking extends App {
 
   override def main(args: Array[String]): Unit = {
+    val executor = Executors.newSingleThreadExecutor
     val transform = asyncF[String, Int](a => a.length)
     val trasnformed = transform("ayy lemon")
-    val executor = Executors.newSingleThreadExecutor
     val inty = Par.run(executor)(trasnformed)
     println(inty)
+    println(Thread.currentThread().getName)
 
 
-    val pars = List(Par.lazyUnit(() => {
+    val par1 = Par.lazyUnit(() => {
       println("Here come")
       "ayy"
-    }), Par.lazyUnit(() => {
-      println("dat boy")
+    })
+    val par2 = Par.lazyUnit(() => {
+      println(Thread.currentThread().getName)
       "lmao"
-    }))
+    })
+    val pars = List(par1, par2)
+
 
     val res = Par.choiceN(Par.unit(1))(pars)
 
-    println(Par.run(executor)(res))
+    println(Par.run(executor)(res)())
 
     executor.shutdown()
   }
@@ -167,7 +171,9 @@ object Nonblocking extends App {
 
     def choiceN[A](p: Par[Int])(ps: List[Par[A]]): Par[A] =
       es => (cb: A => Unit) => p(es) { index =>
-        map2(ps(index), unit())
+        eval(es) {
+          ps(index)(es)(cb)
+        }
       }
 
     def choiceViaChoiceN[A](a: Par[Boolean])(ifTrue: Par[A], ifFalse: Par[A]): Par[A] =
