@@ -14,23 +14,21 @@ object Nonblocking extends App {
     val trasnformed = transform("ayy lemon")
     val inty = Par.run(executor)(trasnformed)
     println(inty)
-    println(Thread.currentThread().getName)
 
-
-    val par1 = Par.lazyUnit(() => {
-      println("Here come")
-      "ayy"
-    })
-    val par2 = Par.lazyUnit(() => {
+    val par1 =("ayy", Par.lazyUnit(() => {
       println(Thread.currentThread().getName)
+      "ayy"
+    }))
+    val par2 = ("lmao", Par.lazyUnit(() => {
       "lmao"
-    })
+    }))
     val pars = List(par1, par2)
+    val mappo = pars.toMap
 
-
-    val res = Par.choiceN(Par.unit(1))(pars)
+    val res = Par.choiceN(Par.unit(1))(pars.map(_._2))
 
     println(Par.run(executor)(res)())
+    println(Par.run(executor)(Par.choiceMap(Par.unit("ayy"))(mappo))())
 
     executor.shutdown()
   }
@@ -180,7 +178,11 @@ object Nonblocking extends App {
       choice(a)(ifTrue, ifFalse)
 
     def choiceMap[K, V](p: Par[K])(ps: Map[K, Par[V]]): Par[V] =
-      ???
+      es => (cb: V => Unit) => p(es) { key =>
+        eval(es) {
+          ps(key)(es)(cb)
+        }
+      }
 
     // see `Nonblocking.scala` answers file. This function is usually called something else!
     def chooser[A, B](p: Par[A])(f: A => Par[B]): Par[B] =
